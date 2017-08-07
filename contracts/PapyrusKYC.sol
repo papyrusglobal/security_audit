@@ -23,12 +23,18 @@ contract PapyrusKYC is MultiAccess {
     /// @param _required New value for KYC requirement.
     function setKycRequirement(address _participant, bool _required) accessGranted {
         require(_participant != address(0));
-        kycRequired[_participant] = _required;
-        KycRequirementChanged(_participant, _required);
+        if (!kycVerified[_participant]) {
+            kycVerified[_participant] = !_required;
+            kycRequired[_participant] = _required;
+            KycRequirementChanged(_participant, _required);
+        }
     }
 
     // FIELDS
 
     // Addresses which require KYC to be verified
     mapping (address => bool) public kycRequired;
+
+    // Addresses that already where KYC verified
+    mapping (address => bool) public kycVerified;
 }
