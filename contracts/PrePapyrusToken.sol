@@ -23,6 +23,7 @@ contract PrePapyrusToken is StandardToken, PrivateParticipation, MultiAccess {
 
     event TokensSold(address indexed to, uint256 amount, uint128 customerId);
     event TokensBurned(address indexed from, uint256 amount);
+    event TransferableChanged(bool transferable);
 
     // PUBLIC FUNCTIONS
 
@@ -52,17 +53,17 @@ contract PrePapyrusToken is StandardToken, PrivateParticipation, MultiAccess {
     }
 
     // Check sender address before transfer
-    function transfer(address _to, uint _value) accessGranted returns (bool) {
+    function transfer(address _to, uint _value) canTransfer returns (bool) {
         return super.transfer(_to, _value);
     }
 
     // Check sender address before approve
-    function approve(address _spender, uint256 _value) accessGranted returns (bool) {
+    function approve(address _spender, uint256 _value) canTransfer returns (bool) {
         return super.approve(_spender, _value);
     }
 
     // Check sender address before transfer
-    function transferFrom(address _from, address _to, uint _value) accessGranted returns (bool) {
+    function transferFrom(address _from, address _to, uint _value) canTransfer returns (bool) {
         return super.transferFrom(_from, _to, _value);
     }
 
@@ -235,6 +236,13 @@ contract PrePapyrusToken is StandardToken, PrivateParticipation, MultiAccess {
         TokensSold(receiver, amountTokens, customerId);
     }
 
+    /// @dev Called by the owner to change ability to transfer tokens by users.
+    function setTransferable(bool _transferable) onlyOwner {
+        require(transferable != _transferable);
+        transferable = _transferable;
+        TransferableChanged(transferable);
+    }
+
     // PRIVATE FUNCTIONS
 
     function finalizeAuction() private {
@@ -266,6 +274,11 @@ contract PrePapyrusToken is StandardToken, PrivateParticipation, MultiAccess {
             stage = Stage.AuctionStartedPublic;
         if (stage == Stage.AuctionStartedPublic && block.number >= auctionFinish)
             finalizeAuction();
+        _;
+    }
+
+    modifier canTransfer() {
+        require(transferable || msg.sender == owner || accessGrants[msg.sender]);
         _;
     }
 
@@ -342,6 +355,9 @@ contract PrePapyrusToken is StandardToken, PrivateParticipation, MultiAccess {
 
     // Current stage of the auction
     Stage public stage;
+
+    // At the start of the token existence it is not transferable
+    bool public transferable = false;
 
     // Amount of supplied tokens is constant and equals to 50 000 000 PRP
     uint256 private constant PRP_LIMIT = 5 * 10**25;
