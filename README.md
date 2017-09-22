@@ -53,9 +53,11 @@ This is not mintable token which means that there are pre-defined amount of PRP 
 
 When token smart contract is created this is guaranteed by checking in construction function that all of created tokens are distibuted to specified wallets.
 
-PRP token is not transferable from the creation. This can be changed later using function `setTransferable()` from *owner* address.
+PRP token is not transferable from the creation. This can be changed later using function `setTransferable()` from addresses registered as access owners.
 
-PRP token has ability to be burned (destroyed). To do that any PRP holder should call function `burn()` with specified amount of PRP tokens that should be burned.
+PRP token has ability to be burned (destroyed). To do that PRP holder should call function `burn()` with specified amount of PRP tokens that should be burned. Burning tokens should work only for addresses registered as access owners.
+
+It is not expected that PRP holders will use function `burn()` directly. Function is supported to allow exchange PRP tokens to PPR tokens. There will be smart contract that will be anounced later and will support some `exchange()` function. This function can be used by any PRP holder. To guarantee burning PRP tokens after exchange they firstly will be moved from PRP holder address to smart contract address that implements function `exchange()` using `delegatecall`. Then smart contract will call `burn()` function from PrePapyrusToken smart contract and burn just exchanged PRP tokens before sending PPR tokens back.
 
 #### Events
 
