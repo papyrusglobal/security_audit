@@ -29,22 +29,17 @@ contract PapyrusToken is StandardToken, Ownable {
     // If ether is sent to this address, send it back
     function() { revert(); }
 
-    // Check transferable state before transfer
+    // Check transfer ability and sender address before transfer
     function transfer(address _to, uint _value) canTransfer returns (bool) {
         return super.transfer(_to, _value);
     }
 
-    // Check transferable state before approve
-    function approve(address _spender, uint256 _value) canTransfer returns (bool) {
-        return super.approve(_spender, _value);
-    }
-
-    // Check transferable state before transfer
+    // Check transfer ability and sender address before transfer
     function transferFrom(address _from, address _to, uint _value) canTransfer returns (bool) {
         return super.transferFrom(_from, _to, _value);
     }
 
-    /// @dev Called by the owner to change ability to transfer tokens by users.
+    /// @dev Change ability to transfer tokens by users.
     function setTransferable(bool _transferable) onlyOwner {
         require(transferable != _transferable);
         transferable = _transferable;

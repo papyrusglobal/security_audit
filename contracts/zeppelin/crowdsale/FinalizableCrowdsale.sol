@@ -6,8 +6,8 @@ import './Crowdsale.sol';
 
 /**
  * @title FinalizableCrowdsale
- * @dev Extension of Crowsdale where an owner can do extra work
- * after finishing. By default, it will end token minting.
+ * @dev Extension of Crowdsale where an owner can do extra work
+ * after finishing.
  */
 contract FinalizableCrowdsale is Crowdsale, Ownable {
   using SafeMath for uint256;
@@ -16,24 +16,25 @@ contract FinalizableCrowdsale is Crowdsale, Ownable {
 
   event Finalized();
 
-  // should be called after crowdsale ends, to do
-  // some extra finalization work
-  function finalize() onlyOwner {
+  /**
+   * @dev Must be called after crowdsale ends, to do some extra finalization
+   * work. Calls the contract's finalization function.
+   */
+  function finalize() onlyOwner public {
     require(!isFinalized);
     require(hasEnded());
 
     finalization();
     Finalized();
-    
+
     isFinalized = true;
   }
 
-  // end token minting on finalization
-  // override this with custom logic if needed
+  /**
+   * @dev Can be overridden to add finalization logic. The overriding function
+   * should call super.finalization() to ensure the chain of finalization is
+   * executed entirely.
+   */
   function finalization() internal {
-    token.finishMinting();
   }
-
-
-
 }
