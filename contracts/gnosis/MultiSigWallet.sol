@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity 0.4.15;
 
 
 /// @title Multisignature wallet - Allows multiple parties to agree on transactions before execution.
@@ -45,49 +45,49 @@ contract MultiSigWallet {
      */
     modifier onlyWallet() {
         if (msg.sender != address(this))
-            revert();
+            throw;
         _;
     }
 
     modifier ownerDoesNotExist(address owner) {
         if (isOwner[owner])
-            revert();
+            throw;
         _;
     }
 
     modifier ownerExists(address owner) {
         if (!isOwner[owner])
-            revert();
+            throw;
         _;
     }
 
     modifier transactionExists(uint transactionId) {
         if (transactions[transactionId].destination == 0)
-            revert();
+            throw;
         _;
     }
 
     modifier confirmed(uint transactionId, address owner) {
         if (!confirmations[transactionId][owner])
-            revert();
+            throw;
         _;
     }
 
     modifier notConfirmed(uint transactionId, address owner) {
         if (confirmations[transactionId][owner])
-            revert();
+            throw;
         _;
     }
 
     modifier notExecuted(uint transactionId) {
         if (transactions[transactionId].executed)
-            revert();
+            throw;
         _;
     }
 
     modifier notNull(address _address) {
         if (_address == 0)
-            revert();
+            throw;
         _;
     }
 
@@ -96,7 +96,7 @@ contract MultiSigWallet {
             || _required > ownerCount
             || _required == 0
             || ownerCount == 0)
-            revert();
+            throw;
         _;
     }
 
@@ -120,7 +120,7 @@ contract MultiSigWallet {
     {
         for (uint i=0; i<_owners.length; i++) {
             if (isOwner[_owners[i]] || _owners[i] == 0)
-                revert();
+                throw;
             isOwner[_owners[i]] = true;
         }
         owners = _owners;
@@ -238,13 +238,13 @@ contract MultiSigWallet {
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {
-            Transaction storage _tx = transactions[transactionId];
-            _tx.executed = true;
-            if (_tx.destination.call.value(_tx.value)(_tx.data))
+            Transaction tx = transactions[transactionId];
+            tx.executed = true;
+            if (tx.destination.call.value(tx.value)(tx.data))
                 Execution(transactionId);
             else {
                 ExecutionFailure(transactionId);
-                _tx.executed = false;
+                tx.executed = false;
             }
         }
     }

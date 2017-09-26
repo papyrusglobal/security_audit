@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity 0.4.15;
 import "./MultiSigWallet.sol";
 
 
@@ -50,19 +50,19 @@ contract MultiSigWalletWithDailyLimit is MultiSigWallet {
         confirmed(transactionId, msg.sender)
         notExecuted(transactionId)
     {
-        Transaction storage _tx = transactions[transactionId];
+        Transaction tx = transactions[transactionId];
         bool _confirmed = isConfirmed(transactionId);
-        if (_confirmed || _tx.data.length == 0 && isUnderLimit(_tx.value)) {
-            _tx.executed = true;
+        if (_confirmed || tx.data.length == 0 && isUnderLimit(tx.value)) {
+            tx.executed = true;
             if (!_confirmed)
-                spentToday += _tx.value;
-            if (_tx.destination.call.value(_tx.value)(_tx.data))
+                spentToday += tx.value;
+            if (tx.destination.call.value(tx.value)(tx.data))
                 Execution(transactionId);
             else {
                 ExecutionFailure(transactionId);
-                _tx.executed = false;
+                tx.executed = false;
                 if (!_confirmed)
-                    spentToday -= _tx.value;
+                    spentToday -= tx.value;
             }
         }
     }

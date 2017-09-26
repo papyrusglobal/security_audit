@@ -53,26 +53,20 @@ Parties interested in buying PRP tokens for amounts of **>=$50,000** can partici
 
 Here is short information about how **TGE Round 1** will be organized technically.
 
-#### Wallets
-
-**2** Papyrus Wallet smart contracts are created. Both of them have **5 owners**, **3 required confirmations** and **0 day limit**. These (and only these) wallets are used to store all existing PRP - **40,000,000 (80%)** on first one and **10,000,000 (20%)** on second one. Wallet that contains 80% PRP is also used as wallet for received **ETH** during **TGE Round 1**.
-
 #### Dedicated server
 
-On dedicated server we have set up and run node for Bitcoin and Ethereum networks. This server constatnly monitors both **TGE Round 1** wallets (BTC and ETH) and accounts all received BTC or ETH. For each received by wallets transaction following data is counted:
-- Address from which BTC or ETH received.
+On dedicated server we have set up and run nodes for Bitcoin and Ethereum networks. This server constantly monitors both **TGE Round 1** wallets (BTC and ETH) and counts all received BTC or ETH. Following data is counted for each received transaction:
+- Address from which ETH received or address which was used for BTC transfer.
 - Amount of received BTC or ETH.
 - Timestamp of transaction (block of transaction) - using this we can calculate token price properly.
 
-Since final price of PRP token depends on **BTC/USD and ETH/USD prices**, dedicated server also accounts that prices constantly. Server does not use any external API to grab BTC/USD and ETH/USD prices. Papyrus team will update that prices on dedicated server manually once per day. This way there is additional data for each received transaction - BTC/USD or ETH/USD price at moment of transaction.
+Since final price of PRP token depends on **BTC/USD and ETH/USD prices**, dedicated server also counts that prices constantly. Server does not use any external API to grab BTC/USD and ETH/USD prices. Papyrus team will update that prices on dedicated server manually once per day. This way there is additional data for each received transaction - BTC/USD or ETH/USD price at moment of transaction.
 
 Each participant of **TGE Round 1** will be **KYC verified** before any tokens are transferred to him/her. Participants who are not KYC verified will get their BTC and ETH back instead of PRP tokens.
 
-The server also organizes PRP tokens sharing and BTC and ETH returning when **TGE Round 1** and all KYC verifications are finished. To do that server submits transactions to Papyrus wallet used to store 80% PRP (this is why Ethereum node on dedicated server should have access one of Papyrus wallet owners accounts). When these transactions are confirmed by two more owners that transactions are executed.
+When **TGE Round 1** and all KYC verifications are finished Papyrus team will mint necessary amount of PRP tokens for all participants. Non-accepted BTC/ETH are also returned back if necessary.
 
-All PRP tokes that were not sold during **TGE Round 1** (in case when hard cap is achieved) will be burned (destroyed). To do that possible it is necessary to register both created Papyrus wallets in PRP token smart contract (using function `grantAccess()`).
-
-Also, to do transfering PRP tokens possible it is necessary to set PRP token transferable (using function `setTransferable()` with argument `True`).
+To do transfering PRP tokens possible it is necessary to set PRP token transferable (using function `setTransferable()` with argument `true` from *owner* address).
 
 ## TGE Round 2 structure
 

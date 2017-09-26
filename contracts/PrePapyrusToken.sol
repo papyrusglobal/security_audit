@@ -1,10 +1,10 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.15;
 
-import "./zeppelin/token/StandardToken.sol";
+import "./zeppelin/token/MintableToken.sol";
 import "./MultiAccess.sol";
 
-/// @title Pre-Papyrus token contract (PRP) including pre-sale support.
-contract PrePapyrusToken is StandardToken, MultiAccess {
+/// @title Pre-Papyrus token smart contract (PRP).
+contract PrePapyrusToken is MintableToken, MultiAccess {
     using SafeMath for uint256;
 
     // EVENTS
@@ -13,23 +13,6 @@ contract PrePapyrusToken is StandardToken, MultiAccess {
     event TokensBurned(address indexed from, uint256 amount);
 
     // PUBLIC FUNCTIONS
-
-    /// @dev Contract constructor function.
-    /// @param _wallets List of wallets addresses used to store some tokens at creation time.
-    /// @param _amounts List of token amounts to store.
-    function PrePapyrusToken(address[] _wallets, uint256[] _amounts) {
-        require(_wallets.length == _amounts.length && _wallets.length > 0);
-        uint i;
-        uint256 sum = 0;
-        for (i = 0; i < _wallets.length; ++i) {
-            sum = sum.add(_amounts[i]);
-        }
-        require(sum == PRP_LIMIT);
-        totalSupply = PRP_LIMIT;
-        for (i = 0; i < _wallets.length; ++i) {
-            balances[_wallets[i]] = _amounts[i];
-        }
-    }
 
     // If ether is sent to this address, send it back
     function() { revert(); }
@@ -45,7 +28,7 @@ contract PrePapyrusToken is StandardToken, MultiAccess {
     }
 
     /// @dev Change ability to transfer tokens by users.
-    function setTransferable(bool _transferable) accessGranted {
+    function setTransferable(bool _transferable) onlyOwner {
         require(transferable != _transferable);
         transferable = _transferable;
         TransferableChanged(transferable);
@@ -81,7 +64,4 @@ contract PrePapyrusToken is StandardToken, MultiAccess {
 
     // At the start of the token existence token is not transferable
     bool public transferable = false;
-
-    // Amount of supplied tokens is constant and equals to 50,000,000 PRP
-    uint256 private constant PRP_LIMIT = 5 * 10**25;
 }
