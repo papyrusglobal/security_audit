@@ -60,7 +60,7 @@ On dedicated server we have set up and run nodes for Bitcoin and Ethereum networ
 - Amount of received BTC or ETH.
 - Timestamp of transaction (block of transaction) - using this we can calculate token price properly.
 
-Since final price of PRP token depends on **BTC/USD and ETH/USD prices**, dedicated server also counts that prices constantly. Server does not use any external API to grab BTC/USD and ETH/USD prices. Papyrus team will update that prices on dedicated server manually once per day. This way there is additional data for each received transaction - BTC/USD or ETH/USD price at moment of transaction.
+Since final price of PRP token depends on **BTC/USD and ETH/USD prices**, dedicated server also counts that prices constantly. Server does not use any external API to grab BTC/USD and ETH/USD prices automatically. Papyrus team will update that prices on dedicated server manually once per day. This way there is additional data for each received transaction - BTC/USD or ETH/USD price at moment of transaction.
 
 Each participant of **TGE Round 1** will be **KYC verified** before any tokens are transferred to him/her. Participants who are not KYC verified will get their BTC and ETH back instead of PRP tokens.
 
