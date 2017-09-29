@@ -8,7 +8,7 @@ contract PapyrusPrototypeToken is StandardToken, Ownable {
 
     // EVENTS
 
-    event Mint(address indexed to, uint256 amount);
+    event Mint(address indexed to, uint256 amount, uint256 priceUsd);
     event MintFinished();
     event TransferableChanged(bool transferable);
 
@@ -39,7 +39,7 @@ contract PapyrusPrototypeToken is StandardToken, Ownable {
             uint256 amountUsd = _amount.mul(_priceUsd).div(10**18);
             totalCollected = totalCollected.add(amountUsd);
         }
-        Mint(_to, _amount);
+        Mint(_to, _amount, _priceUsd);
         Transfer(0x0, _to, _amount);
         return true;
     }
