@@ -1,9 +1,5 @@
 # Base Smart Contracts
 
-We use [OpenZeppelin](https://github.com/OpenZeppelin/zeppelin-solidity) smart contracts as base for some of Papyrus smart contracts. Currently commit 725ed40a57e8973b3ae6e2f39f9c887d0056ca39 is used.
-
-Also we use [MultiSigWalletWithDailyLimit](https://github.com/gnosis/MultiSigWallet) implementation from Gnosis for Papyrus wallets. Commit c23be004ad993248281805303278abe14c410c8d is used.
-
 ## SafeMath.sol
 
 Implements helper functions which make simple arithmetic operations with overflow checking. Based on OpenZeppelin `SafeMath` smart contract. Note that functions throw when overflow is detected.
