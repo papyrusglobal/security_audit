@@ -56,7 +56,7 @@ It has hardcoded name **Papyrus Prototype Token** and symbol **PRP** with **18 d
 
 PRP token is not transferable from the creation. This can be changed later using function `setTransferable()` by *owner* of smart contract.
 
-Smart contract has public variable `totalCollected`. It accumulates amount of received USD during Token Generation Event. To calculate this value in USD when calling `mint` function we specify `_priceUsd` value used at moment of participation. Value **0** can be used for tokens that are minted not as part of Token Generation Event (tokens minted for bounty, etc.). Implementation minting tokens is based on `MintableToken` smart contract from OpenZeppelin, so `_priceUsd` argument and `totalCollected` calculation logic are only differences against it.
+Smart contract has public variable `totalCollected`. It accumulates amount of received USD during Token Generation Event. To calculate this value in USD when calling `mint` function we specify `_priceUsd` value used at moment of participation. Value **0** can be used for tokens that are minted not as part of Token Generation Event (tokens minted for bounty, etc.). Token minting implementation is based on `MintableToken` smart contract from OpenZeppelin, so `_priceUsd` argument and `totalCollected` calculation logic are only differences against it.
 
 #### Events
 
