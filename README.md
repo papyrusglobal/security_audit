@@ -34,7 +34,7 @@ Has an *owner* address and provides basic authorization control functions, this 
 - `transferOwnership` - transfers ownership to new address. Can be used only by current *owner*. Has following arguments:
   - `newOwner` (`address`) - address of new owner.
 
-#### Modificators
+#### Modifiers
 
 - `onlyOwner` - fails if sender is not *owner*.
 
@@ -56,13 +56,14 @@ It has hardcoded name **Papyrus Prototype Token** and symbol **PRP** with **18 d
 
 PRP token is not transferable from the creation. This can be changed later using function `setTransferable()` by *owner* of smart contract.
 
-Smart contract has public variable `totalCollected`. It accumulates amount of received USD during Token Generation Event. To calculate this value in USD when calling `mint` function we specify `_priceUsd` value used at moment of participation. Value **0** can be used for tokens that are minted not as part of Token Generation Event (tokens minted for bounty, etc.). Adding `_priceUsd` argument and `totalCollected` calculation logic is the reason the contract implements mintable behavior directly rather than inheriting from OpenZeppelin `MintableToken`.
+Smart contract has public variable `totalCollected`. It accumulates amount of received USD during Token Generation Event. To calculate this value in USD when calling `mint` function we specify `_priceUsd` value used at moment of participation. Value **0** can be used for tokens that are minted not as part of Token Generation Event (tokens minted for bounty, etc.). Implementation minting tokens is based on `MintableToken` smart contract from OpenZeppelin, so `_priceUsd` argument and `totalCollected` calculation logic are only differences against it.
 
 #### Events
 
 - `Mint` - arises when tokens are minted. Has following arguments:
   - `to` (`address`) - address which gets minted tokens.
   - `amount` (`uint256`) - amount of minted tokens.
+  - `priceUsd` (`uint256`) - price for 1 token in USD at moment of participation.
 - `MintFinished` - arises when minting tokens is over. It is not possible to mint tokens after event is happened.
 - `TransferableChanged` - arises when ability to transfer tokens by holders is changed. Has following arguments:
   - `transferable` (`bool`) - new transferable value.
